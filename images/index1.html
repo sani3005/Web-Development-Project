@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoaBiz - Discover & Support Local Goan Businesses</title>
+    
+    <!-- Google Fonts (Montserrat & Roboto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* --- 1. Global Styles & New "Goa Sunset" Variables --- */
+        :root {
+            --primary-color: #FF6B6B;    /* Warm Coral */
+            --secondary-color: #2C3E50;  /* Deep Indigo/Twilight */
+            --accent-color: #FFD166;     /* Mango Yellow */
+            --bg-color: #F9F7F3;         /* Light Sand */
+            --card-bg-color: #FFFFFF;    /* Crisp White */
+            --text-color: #333333;
+            --heading-font: 'Montserrat', sans-serif;
+            --body-font: 'Roboto', sans-serif;
+            --container-width: 1100px;
+            --border-radius: 12px;
+            --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            --transition-speed: 0.3s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
+        h1, h2, h3 { font-family: var(--heading-font); color: var(--secondary-color); font-weight: 700; line-height: 1.3; }
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.4rem; text-align: center; margin-bottom: 1rem; }
+        h3 { font-size: 1.3rem; }
+        a { color: var(--primary-color); text-decoration: none; transition: color var(--transition-speed) ease; }
+        a:hover { color: var(--secondary-color); }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* --- 2. Animations --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .anim-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+        .anim-delay-1 { animation-delay: 0.2s; }
+        .anim-delay-2 { animation-delay: 0.4s; }
+
+        /* --- 3. Header & Navigation --- */
+        .main-header {
+            background-color: rgba(249, 247, 243, 0.85);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--heading-font); font-size: 1.8rem; color: var(--primary-color); font-weight: 700; }
+        .main-nav { display: none; }
+        .main-nav.is-active { display: block; position: absolute; top: 100%; left: 0; width: 100%; background-color: var(--bg-color); box-shadow: 0 10px 10px rgba(0,0,0,0.05); }
+        .nav-links { list-style: none; display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
+        .nav-links li { margin: 0.8rem 0; }
+        .nav-links a { color: var(--secondary-color); font-weight: 600; font-size: 1.1rem; padding: 0.5rem 1rem; position: relative; }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            transition: width var(--transition-speed) ease;
+        }
+        .nav-links a:hover::after { width: 70%; }
+        .hamburger { display: block; background: none; border: none; color: var(--secondary-color); font-size: 1.8rem; cursor: pointer; }
+
+        /* --- 4. CTA Button --- */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-color), #ff8a8a);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            border: none;
+        }
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+        }
+        .cta-button.secondary { 
+            background: var(--secondary-color); 
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3); 
+        }
+        .cta-button.secondary:hover { 
+            background: #3c536d;
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.4);
+        }
+
+        /* --- 5. Page Sections --- */
+        section { padding: 80px 0; }
+        .hero-section {
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            min-height: 100vh;
+            background:linear-gradient(rgba(174, 52, 52, 0.45), rgba(0,0,0,0.45)), url('0-Featured-Spice-Plantations-in-Goa.png') no-repeat center center/cover;
+            color: white;
+        }
+        .hero-content h1 { color: white; font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); }
+        .hero-content p { font-size: 1.3rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .usp-section { background-color: var(--card-bg-color); }
+        .usp-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+        .usp-item i { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 1rem; }
+        .about-container { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+        .about-image img { border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
+        .about-text h2 { text-align: left; }
+
+        /* Businesses/Gallery Section */
+        .gallery-section { background-color: var(--bg-color); border-top: 1px solid #eee; border-bottom: 1px solid #eee;}
+        .section-subtitle { text-align: center; margin-top: -1rem; margin-bottom: 2.5rem; color: #666; }
+        .search-bar-container { position: relative; max-width: 500px; margin: 2.5rem auto; }
+        #search-bar { width: 100%; padding: 18px 25px 18px 55px; border-radius: 50px; border: 1px solid #ddd; font-size: 1rem; font-family: var(--body-font); transition: all var(--transition-speed) ease; }
+        #search-bar:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2); }
+        .search-bar-container i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 1.1rem; }
+
+        .business-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        .business-card {
+            background-color: var(--card-bg-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            display: flex; flex-direction: column;
+        }
+        .business-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .business-card img { width: 100%; height: 240px; object-fit: cover; }
+        .card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-category {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+        .card-content h3 { margin-bottom: 0.5rem; }
+        .card-content p { margin-bottom: 0; font-size: 0.95rem; color: #555; }
+
+        /* Contact Section */
+        .contact-section { background-color: var(--card-bg-color); }
+        .contact-container { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 15px; margin-bottom: 1rem; border-radius: var(--border-radius); border: 1px solid #ccc; font-family: var(--body-font); font-size: 1rem; }
+        .contact-info i { color: var(--primary-color); }
+
+        /* --- 6. Footer --- */
+        .main-footer { background-color: var(--secondary-color); color: #e0e0e0; padding: 3rem 0; text-align: center; }
+        .main-footer .container { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .social-links a { color: white; margin: 0 0.7rem; font-size: 1.4rem; transition: all var(--transition-speed) ease; }
+        .social-links a:hover { color: var(--accent-color); transform: translateY(-3px); }
+
+        /* --- 7. Media Queries --- */
+        @media (min-width: 768px) {
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.8rem; }
+            .hamburger { display: none; }
+            .main-nav { display: block; position: static; width: auto; background: none; box-shadow: none; }
+            .nav-links { flex-direction: row; gap: 2rem; padding: 0; }
+            .nav-links li { margin: 0; }
+            .usp-grid { grid-template-columns: repeat(3, 1fr); }
+            .about-container { grid-template-columns: 1fr 1fr; }
+            .business-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-container { grid-template-columns: 1fr 1fr; }
+            .main-footer .container { flex-direction: row; justify-content: space-between; }
+        }
+        @media (min-width: 1024px) {
+            .business-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#home" class="logo">GoaBiz</a>
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#businesses">Businesses</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger" id="hamburger-menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Section (Hero) with Animation -->
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <h1 class="anim-fade-in-up">The Heartbeat of Goan Commerce</h1>
+                <p class="anim-fade-in-up anim-delay-1">Your gateway to discovering and supporting authentic local businesses, artisans, and creators across Goa.</p>
+                <a href="#businesses" class="cta-button anim-fade-in-up anim-delay-2">Explore Local Stores</a>
+            </div>
+        </section>
+
+        <!-- USP Section -->
+        <section class="usp-section">
+            <div class="container">
+                 <div class="usp-grid">
+                    <div class="usp-item">
+                        <i class="fas fa-store-alt"></i>
+                        <h3>Authentic Products</h3>
+                        <p>Shop genuine, high-quality goods directly from local Goan sellers.</p>
+                    </div>
+                    <div class="usp-item">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>Empower Community</h3>
+                        <p>Every purchase supports local families and preserves Goan culture.</p>
+                    </div>
+                    <div class="usp-item">
+                        <i class="fas fa-compass"></i>
+                        <h3>Discover Uniqueness</h3>
+                        <p>Find one-of-a-kind treasures and experiences you won't find elsewhere.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="content-section">
+            <div class="container about-container">
+                <div class="about-image">
+                    <img src="0-Featured-Spice-Plantations-in-Goa.png" alt="Vibrant Goan market scene">
+                </div>
+                <div class="about-text">
+                    <h2>Our Vision</h2>
+                    <h3>Championing Local Enterprise</h3>
+                    <p>GoaBiz was born from a love for Goa's vibrant culture and a desire to empower its talented local creators. We are a bridge between passionate artisans, producers, and a conscious audience that values authenticity. Our mission is to provide a platform where the rich tapestry of Goan business can be discovered, celebrated, and supported by everyone.</p>
+                    <a href="#contact" class="cta-button secondary">Partner With Us</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Businesses Section -->
+        <section id="businesses" class="gallery-section">
+            <div class="container">
+                <h2>Explore Local Businesses</h2>
+                <p class="section-subtitle">From handcrafted souvenirs to delicious local delicacies.</p>
+                
+                <div class="search-bar-container">
+                    <input type="text" id="search-bar" placeholder="Search by name, category (e.g., crafts, food)...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="business-grid" id="business-grid">
+                     <div class="business-card">
+                        <img src="IMG20240726181543-1024x1024.jpg" alt="Handicrafts">
+                        <div class="card-content">
+                            <span class="card-category">Crafts</span>
+                            <h3>Goan Heritage Crafts</h3>
+                            <p>Exquisite, hand-painted Azulejo tiles and ceramic souvenirs inspired by Goan-Portuguese architecture.</p>
+                        </div>
+                    </div>
+                     <div class="business-card">
+                        <img src="Screenshot 2025-08-14 164832.png" alt="Spices">
+                        <div class="card-content">
+                            <span class="card-category">Food</span>
+                            <h3>Kumbhar Pottery Studio</h3>
+                            <p>Authentic, stone-ground Goan spice mixes and pickles, made from traditional family recipes.
+Plot No 91,  Bicholim Industrial Estate, Behind Idc Office, Bicholim-403504
+https://jsdl.in/DT-26KPMFBD</p>
+                        </div>
+                    </div>
+                     <div class="business-card">
+                        <img src="https://images.unsplash.com/photo-1594225095383-a8fd5d5d5973?q=80&w=1964&auto=format&fit=crop" alt="Fashion">
+                        <div class="card-content">
+                            <span class="card-category">Fashion</span>
+                            <h3>The Salty Soul Boutique</h3>
+                            <p>Bohemian-style beachwear, handmade jewelry, and leather accessories for the free-spirited traveler.</p>
+                        </div>
+                    </div>
+                    <div class="business-card">
+                        <img src="https://images.unsplash.com/photo-1587888637146-838a362240b3?q=80&w=2070&auto=format&fit=crop" alt="Organic Products">
+                        <div class="card-content">
+                            <span class="card-category">Wellness</span>
+                            <h3>Konkan Organics</h3>
+                            <p>Fresh, organic cashews, kokum butter, and essential oils grown sustainably in the Goan hinterlands.</p>
+                        </div>
+                    </div>
+                     <div class="business-card">
+                        <img src="https://images.unsplash.com/photo-1555425639-95f8745c1b6a?q=80&w=1974&auto=format&fit=crop" alt="Bakery">
+                        <div class="card-content">
+                            <span class="card-category">Bakery</span>
+                            <h3>Poee Power</h3>
+                            <p>Traditional Goan bread (Poee) and other baked delights, delivered fresh from a wood-fired oven.</p>
+                        </div>
+                    </div>
+                     <div class="business-card">
+                        <img src="https://images.unsplash.com/photo-1572206222272-a25cc395fbde?q=80&w=1974&auto=format&fit=crop" alt="Art">
+                        <div class="card-content">
+                            <span class="card-category">Art</span>
+                            <h3>Mario's Gallery</h3>
+                            <p>Vibrant illustrations and prints capturing the daily life and humor of Goa by local artists.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="container contact-container">
+                <div class="contact-form-wrapper">
+                    <h2>Get In Touch</h2>
+                    <p>Want to feature your business or have a question? Reach out!</p>
+                    <form action="#" class="contact-form">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="cta-button">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info-wrapper">
+                    <h3>Contact GoaBiz</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Panjim, Goa, India</p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:+919876543210">+91 98765 43210</a></p>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:hello@goabiz.com">hello@goabiz.com</a></p>
+                    </div>
+                    <div class="map-container">
+                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61533.81811345473!2d73.79184311898925!3d15.49454733397949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfc0a54e413265%3A0x1300993d349d4435!2sPanaji%2C%20Goa!5e0!3m2!1sen!2sin!4v1723577312379!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <p>© 2025 GoaBiz. Connecting Local, Empowering All.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Mobile Navigation Toggle
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const mainNav = document.querySelector('.main-nav');
+
+            hamburgerMenu.addEventListener('click', () => {
+                mainNav.classList.toggle('is-active');
+            });
+
+            // Close mobile menu when a link is clicked
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('is-active')) {
+                        mainNav.classList.remove('is-active');
+                    }
+                });
+            });
+
+            // 2. Business Search Filter
+            const searchBar = document.getElementById('search-bar');
+            const businessGrid = document.getElementById('business-grid');
+            const businessCards = businessGrid.getElementsByClassName('business-card');
+
+            searchBar.addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+
+                for (let card of businessCards) {
+                    const cardContent = card.querySelector('.card-content');
+                    const title = cardContent.querySelector('h3').textContent.toLowerCase();
+                    const description = cardContent.querySelector('p').textContent.toLowerCase();
+                    const category = cardContent.querySelector('.card-category').textContent.toLowerCase();
+
+                    // Check if search term is in the title, description, or category
+                    if (title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm)) {
+                        card.style.display = 'flex'; // Show the card
+                    } else {
+                        card.style.display = 'none';  // Hide the card
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
